@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 # Config & Variables
-QEMU_APP="QEMU-git-x86_64.AppImage"
+QEMU_APP="./QEMU-git-x86_64.AppImage"
 SEVEN_BIN="./7zzs"
 WIN_IMAGE="ws2012r2.qcow2"
 TUNNEL_BIN="./kami-tunnel"
