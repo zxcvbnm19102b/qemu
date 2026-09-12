@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 # Config & Variables
-QEMU_APP="./QEMU-git-x86_64.AppImage"
+QEMU_APP="./QEMU-11.1.1-1-anylinux-x86_64.AppImage"
 SEVEN_BIN="./7zzs"
 WIN_IMAGE="ws2012r2.qcow2"
 TUNNEL_BIN="./kami-tunnel"
@@ -47,7 +47,7 @@ fetch_and_extract() {
 
 # 1. QEMU AppImage
 fetch_and_extract "$QEMU_APP" \
-    "https://github.com/lucasmz1/Qemu-AppImage/releases/download/continuous-stable-jammy/QEMU-git-x86_64.AppImage" "$QEMU_APP"
+    "https://github.com/pkgforge-dev/QEMU-AppImage/releases/download/11.1.1-1%402026-09-11_1789114478/QEMU-11.1.1-1-anylinux-x86_64.AppImage" "$QEMU_APP"
 chmod +x "$QEMU_APP"
 
 # 2. 7-Zip static
