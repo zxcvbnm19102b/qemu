@@ -77,14 +77,13 @@ echo "[*] Installing cloudflared..."
 wget -qO /usr/local/bin/cloudflared \
 https://github.com/cloudflare/cloudflared/releases/download/2026.9.3/cloudflared-linux-amd64
 chmod +x /usr/local/bin/cloudflared
+vncserver :1 &
+novnc_proxy --vnc localhost:5901 --listen 6080 &
 
-mkdir -p /root/.tmux
-tmux -S /root/.tmux/socket new -d -s vnc 'vncserver :1'
-tmux -S /root/.tmux/socket new -d -s novnc 'novnc_proxy --vnc localhost:5901'
-tmux -S /root/.tmux/socket new -d -s cf 'cloudflared tunnel --url http://localhost:6080 2>&1 | tee /tmp/cf.log'
-sleep 5
-grep -oE 'https://[^ ]+\.trycloudflare\.com' /tmp/cf.log 2>/dev/null | head -1 || true
+sleep 3
+
 echo
-echo "========== Services =========="
-tmux ls
-'''],check=True)
+echo "========== Cloudflare =========="
+cloudflared tunnel --url http://localhost:6080
+
+v
