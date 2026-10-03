@@ -53,37 +53,40 @@ if not PROOT:
 print("[*] Entering Alpine...")
 
 subprocess.run([
-    PROOT,"-0","-r",str(ROOT),"-w","/root",
-    "-b","/dev","-b","/proc","-b","/sys",
-    "-b","/etc/resolv.conf:/etc/resolv.conf",
-    "/bin/sh","-c",r'''
-set -e
+        PROOT,"-0","-r",str(ROOT),"-w","/root",
+        "-b","/dev","-b","/proc","-b","/sys",
+        "-b","/etc/resolv.conf:/etc/resolv.conf",
+        "/bin/sh","-c",r'''
+        set -e
 
-apk add --no-cache xfce4 dbus dbus-x11 tigervnc tmux novnc wget firefox
+        apk add --no-cache xfce4 dbus dbus-x11 tigervnc novnc wget firefox
 
-mkdir -p ~/.vnc
-printf 'alpine\n' | vncpasswd -f > ~/.vnc/passwd
-chmod 600 ~/.vnc/passwd
+        mkdir -p ~/.vnc
+        printf 'alpine\n' | vncpasswd -f > ~/.vnc/passwd
+        chmod 600 ~/.vnc/passwd
 
-cat > ~/.vnc/xstartup <<'EOF'
-#!/bin/sh
-unset SESSION_MANAGER
-unset DBUS_SESSION_BUS_ADDRESS
-exec dbus-run-session startxfce4
-EOF
-chmod +x ~/.vnc/xstartup
+        cat > ~/.vnc/xstartup <<'EOF'
+    #!/bin/sh
+    unset SESSION_MANAGER
+    unset DBUS_SESSION_BUS_ADDRESS
+    exec dbus-run-session startxfce4
+    EOF
+    chmod +x ~/.vnc/xstartup
 
-echo "[*] Installing cloudflared..."
-wget -qO /usr/local/bin/cloudflared \
-https://github.com/cloudflare/cloudflared/releases/download/2026.9.3/cloudflared-linux-amd64
-chmod +x /usr/local/bin/cloudflared
-vncserver :1 &
-novnc_proxy --vnc localhost:5901 --listen 6080 &
+    echo "[*] Installing cloudflared..."
+    wget -qO /usr/local/bin/cloudflared \
+    https://github.com/cloudflare/cloudflared/releases/download/2026.9.3/cloudflared-linux-amd64
+    chmod +x /usr/local/bin/cloudflared
 
-sleep 3
+    echo "[*] Starting VNC..."
+    vncserver :1 &
 
-echo
-echo "========== Cloudflare =========="
-cloudflared tunnel --url http://localhost:6080
+    echo "[*] Starting noVNC..."
+    novnc_proxy --vnc localhost:5901 --listen 6080 &
 
-v
+    sleep 3
+
+    echo
+    echo "========== Cloudflare =========="
+    cloudflared tunnel --url http://localhost:6080
+    '''],check=True)
