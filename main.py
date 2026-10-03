@@ -79,17 +79,19 @@ wget -qO /usr/local/bin/cloudflared \
 https://github.com/cloudflare/cloudflared/releases/download/2026.9.3/cloudflared-linux-amd64
 
 chmod +x /usr/local/bin/cloudflared
+echo "[*] Starting VNC..."
+vncserver :1 2>/dev/null || true
 
 echo "[*] Starting VNC..."
 vncserver :1 &
 
 echo "[*] Starting noVNC..."
-novnc_proxy --vnc localhost:5901 --listen 6080 &
+novnc_server --vnc localhost:5901 --listen 6080 &
 
 sleep 3
 
 echo
 echo "========== Cloudflare =========="
-
 cloudflared tunnel --url http://localhost:6080
+
     '''],check=True)
