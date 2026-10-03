@@ -80,9 +80,6 @@ https://github.com/cloudflare/cloudflared/releases/download/2026.9.3/cloudflared
 
 chmod +x /usr/local/bin/cloudflared
 echo "[*] Starting VNC..."
-vncserver :1 2>/dev/null || true
-
-echo "[*] Starting VNC..."
 vncserver :1 &
 
 echo "[*] Starting noVNC..."
